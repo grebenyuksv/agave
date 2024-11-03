@@ -1168,14 +1168,14 @@ where
 
     let mut measure_notify = Measure::start("accounts_notify");
 
-    let accounts_db = Arc::new(accounts_db);
-    let accounts_db_clone = accounts_db.clone();
-    let handle = Builder::new()
-        .name("solNfyAccRestor".to_string())
-        .spawn(move || {
-            accounts_db_clone.notify_account_restore_from_snapshot();
-        })
-        .unwrap();
+    // let accounts_db = Arc::new(accounts_db);
+    // let accounts_db_clone = accounts_db.clone();
+    // let handle = Builder::new()
+    //     .name("solNfyAccRestor".to_string())
+    //     .spawn(move || {
+    //         accounts_db_clone.notify_account_restore_from_snapshot();
+    //     })
+    //     .unwrap();
 
     let IndexGenerationInfo {
         accounts_data_len,
@@ -1191,7 +1191,7 @@ where
         .set(rent_paying_accounts_by_partition)
         .unwrap();
 
-    handle.join().unwrap();
+    // handle.join().unwrap();
     measure_notify.stop();
 
     datapoint_info!(
@@ -1200,7 +1200,8 @@ where
     );
 
     Ok((
-        Arc::try_unwrap(accounts_db).unwrap(),
+        accounts_db,
+        // Arc::try_unwrap(accounts_db).unwrap(),
         ReconstructedAccountsDbInfo { accounts_data_len },
     ))
 }
